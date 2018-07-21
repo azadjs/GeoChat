@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/gradient_background"
+    tools:context=".Activity_Registration">
+    <RelativeLayout
+        android:id="@+id/relative_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/profile_photo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@drawable/button_round"
+            android:src="@drawable/profile_photo"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_wo_corner"
+         />
+
+        <TextView
+            android:layout_below="@id/profile_photo"
+            android:paddingTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/registration_photo_desc"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative_name"
+        android:layout_below="@+id/relative_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <LinearLayout
+            android:id="@+id/registration_name_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registration_name_desc"
+                android:textColor="@color/white"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_below="@+id/registration_name_desc"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/registration_name"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/button_corner"
+                android:hint="@string/registration_name"
+                android:textColorHint="@color/slightly_gray"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textColor="@color/white"
+                android:textSize="15sp"/>
+        </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/relative_birthdate"
+        android:layout_below="@+id/relative_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <LinearLayout
+            android:id="@+id/registration_birthdate_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registration_birthdate_desc"
+                android:textColor="@color/white"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/registration_birthdate"
+            android:layout_below="@+id/registration_birthdate_desc"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/registration_date"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:hint="@string/registration_birthdate"
+                android:textColor="@color/slightly_gray"
+                android:singleLine="true"
+                android:background="@drawable/button_round"
+                android:textColorHint="@color/slightly_gray"
+                android:padding="15dp"
+                android:textSize="15sp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+<RelativeLayout
+    android:id="@+id/relative_gender"
+    android:layout_below="@+id/relative_birthdate"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp">
+
+    <LinearLayout
+        android:id="@+id/registration_gender_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/registration_gender_desc"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/registration_gender"
+        android:layout_below="@id/registration_gender_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+
+        <RadioGroup
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <RadioButton android:id="@+id/radio_male"
+                android:textSize="20sp"
+                android:layout_marginRight="50dp"
+                android:textColor="@color/slightly_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radio_male"
+                android:onClick="onRadioButtonClicked"/>
+
+            <RadioButton android:id="@+id/radio_female"
+                android:textSize="20sp"
+                android:textColor="@color/slightly_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radio_female"
+                android:onClick="onRadioButtonClicked"/>
+        </RadioGroup>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/registration_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/registration_gender"
+        android:layout_centerHorizontal="true">
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/button_new"
+            android:fontFamily="sans-serif-medium"
+            android:paddingLeft="70dp"
+            android:paddingRight="70dp"
+            android:text="@string/registration_button"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</RelativeLayout>
+
+
+</RelativeLayout>
