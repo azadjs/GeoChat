@@ -11,8 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,7 +26,7 @@ import com.hbb20.CountryCodePicker;
 
 import java.util.concurrent.TimeUnit;
 
-public class Activity_Login extends AppCompatActivity {
+public class ActivityLogin extends AppCompatActivity {
 
     private static final String TAG = "PhoneAuth";
 
@@ -57,7 +55,6 @@ public class Activity_Login extends AppCompatActivity {
 
     private FirebaseAuth fbAuth;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +75,8 @@ public class Activity_Login extends AppCompatActivity {
         resendButton.setEnabled(false);
 
         fbAuth = FirebaseAuth.getInstance();
+        fbAuth.useAppLanguage();
         handler.postDelayed(runnable, 2000);
-
 
 
     }
@@ -162,7 +159,7 @@ public class Activity_Login extends AppCompatActivity {
                             FirebaseUser user = task.getResult().getUser();
                             String phoneNumber = user.getPhoneNumber();
 
-                            Intent intent = new Intent(Activity_Login.this, MainActivity.class);
+                            Intent intent = new Intent(ActivityLogin.this, MainActivity.class);
                             intent.putExtra("phone", phoneNumber);
                             startActivity(intent);
                             finish();

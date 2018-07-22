@@ -21,13 +21,16 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.meg7.widget.CustomShapeImageView;
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.io.File;
 import java.util.Calendar;
 
-public class Activity_Registration extends AppCompatActivity {
+public class ActivityRegistration extends AppCompatActivity {
 
 
-    ImageView imageView;
+    CustomShapeImageView customShapeImageView;
     Button buttonGallery ,login_button;
     File file;
     Uri uri;
@@ -46,7 +49,7 @@ public class Activity_Registration extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        imageView = (ImageView)findViewById(R.id.profile_photo);
+        customShapeImageView = (CustomShapeImageView) findViewById(R.id.profile_photo);
         buttonGallery = (Button)findViewById(R.id.button1);
         EnableRuntimePermission();
         buttonGallery.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +70,7 @@ public class Activity_Registration extends AppCompatActivity {
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog dialog = new DatePickerDialog(
-                        Activity_Registration.this,
+                        ActivityRegistration.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         mDateSetListener,
                         year,month,day);
@@ -114,14 +117,13 @@ public class Activity_Registration extends AppCompatActivity {
             }
         }
         else if (requestCode == 1) {
-
             if (data != null) {
 
                 Bundle bundle = data.getExtras();
 
                 Bitmap bitmap = bundle.getParcelable("data");
 
-                imageView.setImageBitmap(bitmap);
+                customShapeImageView.setImageBitmap(bitmap);
 
             }
         }
@@ -152,15 +154,15 @@ public class Activity_Registration extends AppCompatActivity {
 
     public void EnableRuntimePermission(){
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(Activity_Registration.this,
+        if (ActivityCompat.shouldShowRequestPermissionRationale(ActivityRegistration.this,
                 Manifest.permission.CAMERA))
         {
 
-            Toast.makeText(Activity_Registration.this,"CAMERA permission allows us to Access CAMERA app", Toast.LENGTH_LONG).show();
+            Toast.makeText(ActivityRegistration.this,"CAMERA permission allows us to Access CAMERA app", Toast.LENGTH_LONG).show();
 
         } else {
 
-            ActivityCompat.requestPermissions(Activity_Registration.this,new String[]{
+            ActivityCompat.requestPermissions(ActivityRegistration.this,new String[]{
                     Manifest.permission.CAMERA}, RequestPermissionCode);
 
         }
@@ -175,11 +177,11 @@ public class Activity_Registration extends AppCompatActivity {
 
                 if (PResult.length > 0 && PResult[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    Toast.makeText(Activity_Registration.this,"Permission Granted, Now your application can access CAMERA.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ActivityRegistration.this,"Permission Granted, Now your application can access CAMERA.", Toast.LENGTH_LONG).show();
 
                 } else {
 
-                    Toast.makeText(Activity_Registration.this,"Permission Canceled, Now your application cannot access CAMERA.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ActivityRegistration.this,"Permission Canceled, Now your application cannot access CAMERA.", Toast.LENGTH_LONG).show();
 
                 }
                 break;
@@ -208,7 +210,7 @@ public class Activity_Registration extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Activity_Registration.this,MainActivity.class));
+                startActivity(new Intent(ActivityRegistration.this,MainActivity.class));
                 finish();
             }
         });
