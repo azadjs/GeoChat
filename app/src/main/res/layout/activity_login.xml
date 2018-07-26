@@ -12,8 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp">
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
 
         <ImageView
             android:id="@+id/imgView_logo"
@@ -22,14 +22,14 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_geochat"/>
-        
+
         <RelativeLayout
             android:id="@+id/rellay"
             android:layout_below="@+id/imgView_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone">
-            
+            >
+
             <TextView
                 android:id="@+id/login"
                 android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
                     android:layout_marginBottom="5dp"
                     android:text="@string/login_phone_desc"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="16sp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:gravity="center_vertical"
@@ -87,7 +87,7 @@
                     app:ccp_autoDetectCountry="true"
                     app:ccp_textSize="15sp"
                     app:ccp_countryAutoDetectionPref="SIM_ONLY"/>
-                
+
                 <EditText
                     android:id="@+id/phoneText"
                     android:layout_width="match_parent"
@@ -108,9 +108,10 @@
             <LinearLayout
                 android:id="@+id/linlay_buttons"
                 android:layout_below="@+id/linlay1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
                 android:orientation="horizontal"
+                android:gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp">
 
@@ -118,23 +119,29 @@
                     android:id="@+id/login_send"
                     android:layout_width="130dp"
                     android:layout_height="40dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="15dp"
                     android:background="@drawable/button_new"
+                    android:elevation="10dp"
+                    android:translationZ="2dp"
+                    android:onClick="sendCode"
+                    android:stateListAnimator="@null"
                     android:text="@string/login_send_button"
                     android:textAllCaps="false"
-                    android:onClick="sendCode"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="8dp"/>
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/login_resend"
+                    android:stateListAnimator="@null"
                     android:layout_width="130dp"
                     android:layout_height="40dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="15dp"
                     android:background="@drawable/button_new"
                     android:text="@string/login_retry_button"
                     android:textAllCaps="false"
+                    android:elevation="10dp"
+                    android:translationZ="2dp"
                     android:onClick="resendCode"
                     android:textColor="@color/white"
                     android:textSize="16sp"
@@ -144,7 +151,7 @@
             <LinearLayout
                 android:id="@+id/linlay_verify"
                 android:layout_below="@id/linlay_buttons"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:orientation="vertical"
@@ -155,11 +162,11 @@
                     android:layout_marginBottom="5dp"
                     android:text="@string/login_verify"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/codeText"
-                    android:layout_width="180dp"
+                    android:layout_width="170dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
                     android:ems="10"
@@ -174,16 +181,19 @@
             </LinearLayout>
             <Button
                 android:id="@+id/login_next"
+                android:stateListAnimator="@null"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_below="@+id/linlay_verify"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/button_new"
                 android:fontFamily="sans-serif-medium"
                 android:paddingLeft="70dp"
                 android:paddingRight="70dp"
                 android:text="@string/login_next"
+                android:elevation="10dp"
+                android:translationZ="10dp"
                 android:onClick="verifyCode"
                 android:layout_marginBottom="50dp"
                 android:textAllCaps="false"

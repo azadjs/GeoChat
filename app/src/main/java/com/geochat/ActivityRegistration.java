@@ -1,6 +1,7 @@
 package com.geochat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -10,33 +11,43 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.meg7.widget.CustomShapeImageView;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
+import com.meg7.widget.CustomShapeImageView;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Calendar;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+
 public class ActivityRegistration extends AppCompatActivity {
-
-
-    CustomShapeImageView customShapeImageView;
+    User user = new User();
+    private CustomShapeImageView customShapeImageView;
     Button buttonGallery ,login_button;
     File file;
     Uri uri;
+    private byte[] bitmapdata;
     Intent GalIntent, CropIntent ;
     public  static final int RequestPermissionCode  = 1 ;
-    DisplayMetrics displayMetrics ;
     int width, height;
 
     RadioButton male;
@@ -84,6 +95,7 @@ public class ActivityRegistration extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 String date = day + "/" + month + "/" + year;
+                user.setBirthdate(date);
                 mDisplayDate.setText(date);
             }
         };
@@ -116,19 +128,39 @@ public class ActivityRegistration extends AppCompatActivity {
 
             }
         }
-        else if (requestCode == 1) {
+        else if (requestCode == 1){
             if (data != null) {
-
                 Bundle bundle = data.getExtras();
-
                 Bitmap bitmap = bundle.getParcelable("data");
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                bitmapdata = bos.toByteArray();
 
                 customShapeImageView.setImageBitmap(bitmap);
-
             }
         }
     }
 
+public void sendUser() {
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("https://localhost:3000/api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+    UserUploadService userApi = retrofit.create(UserUploadService.class);
+    RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), bitmapdata);
+    MultipartBody.Part image = MultipartBody.Part.createFormData("image", bitmapdata.toString(), requestBody);
+    Call<ResponseBody> call = userApi.UserSend(user.getName(), user.getBirthdate(), user.getPhone_number(), user.getGender(), user.getDevice_id(), image);
+    call.enqueue(new Callback<ResponseBody> () {
+        @Override
+        public void onResponse (Call<ResponseBody> call, Response<ResponseBody> response){
+            ResponseBody body = response.body();
+        }
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+        }
+    });
+}
     public void ImageCropFunction() {
 
         // Image Crop Code
@@ -196,20 +228,29 @@ public class ActivityRegistration extends AppCompatActivity {
         switch(view.getId()) {
             case R.id.radio_male:
                 if (checked)
-
+                   user.setGender("m");
                     break;
             case R.id.radio_female:
                 if (checked)
-
+                    user.setGender("f");
                     break;
         }
     }
+
+    public String getDeviceUniqueID(Activity activity){
+        String device_unique_id = Settings.Secure.getString(activity.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        user.setDevice_id(device_unique_id);
+        return device_unique_id;
+    }
+
 
     public void navigateToMainActivity(){
         login_button = (Button) findViewById(R.id.login_button);
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendUser();
                 startActivity(new Intent(ActivityRegistration.this,MainActivity.class));
                 finish();
             }

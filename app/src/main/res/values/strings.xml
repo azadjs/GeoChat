@@ -3,7 +3,7 @@
     <string name="app_description">private chat with people nearby</string>
     <string name="login_phone_desc">Login with phone number</string>
     <string name="login_phone">phone number</string>
-    <string name="login_verify">Please,enter your verify code:</string>
+    <string name="login_verify">Please,enter your verify code</string>
     <string name="login">Login</string>
     <string name="login_send_button">Send</string>
     <string name="login_retry_button">Resend</string>

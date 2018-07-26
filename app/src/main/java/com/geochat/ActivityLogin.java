@@ -27,7 +27,7 @@ import com.hbb20.CountryCodePicker;
 import java.util.concurrent.TimeUnit;
 
 public class ActivityLogin extends AppCompatActivity {
-
+    User user = new User();
     private static final String TAG = "PhoneAuth";
 
     private RelativeLayout rellay;
@@ -84,7 +84,7 @@ public class ActivityLogin extends AppCompatActivity {
     public void sendCode(View view) {
 
         number = ccp.getFullNumberWithPlus();
-
+        user.setPhone_number(number);
         setUpVerificatonCallbacks();
 
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
@@ -159,7 +159,7 @@ public class ActivityLogin extends AppCompatActivity {
                             FirebaseUser user = task.getResult().getUser();
                             String phoneNumber = user.getPhoneNumber();
 
-                            Intent intent = new Intent(ActivityLogin.this, MainActivity.class);
+                            Intent intent = new Intent(ActivityLogin.this, ActivityRegistration.class);
                             intent.putExtra("phone", phoneNumber);
                             startActivity(intent);
                             finish();
