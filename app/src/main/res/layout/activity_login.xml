@@ -125,7 +125,6 @@
                     android:elevation="10dp"
                     android:translationZ="2dp"
                     android:onClick="sendCode"
-                    android:stateListAnimator="@null"
                     android:text="@string/login_send_button"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
@@ -133,7 +132,6 @@
 
                 <Button
                     android:id="@+id/login_resend"
-                    android:stateListAnimator="@null"
                     android:layout_width="130dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="15dp"
@@ -181,7 +179,6 @@
             </LinearLayout>
             <Button
                 android:id="@+id/login_next"
-                android:stateListAnimator="@null"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_below="@+id/linlay_verify"

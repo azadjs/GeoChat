@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-
+import com.geochat.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -27,7 +27,6 @@ import com.hbb20.CountryCodePicker;
 import java.util.concurrent.TimeUnit;
 
 public class ActivityLogin extends AppCompatActivity {
-    User user = new User();
     private static final String TAG = "PhoneAuth";
 
     private RelativeLayout rellay;
@@ -38,7 +37,7 @@ public class ActivityLogin extends AppCompatActivity {
     private Button sendButton;
     private Button resendButton;
     private EditText codeText;
-    String number;
+    public String number;
     Handler handler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
@@ -84,7 +83,7 @@ public class ActivityLogin extends AppCompatActivity {
     public void sendCode(View view) {
 
         number = ccp.getFullNumberWithPlus();
-        user.setPhone_number(number);
+        User.setPhone_number(number);
         setUpVerificatonCallbacks();
 
         PhoneAuthProvider.getInstance().verifyPhoneNumber(

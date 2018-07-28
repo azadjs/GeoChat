@@ -4,32 +4,38 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
+import android.util.Base64;
+import android.util.Base64InputStream;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.geochat.User;
 
-
+import com.google.gson.Gson;
 import com.meg7.widget.CustomShapeImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Calendar;
-
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -40,21 +46,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class ActivityRegistration extends AppCompatActivity {
-    User user = new User();
     private CustomShapeImageView customShapeImageView;
     Button buttonGallery ,login_button;
-    File file;
-    Uri uri;
+    private File file;
+    private Uri uri;
+    EditText registration_name;
     private byte[] bitmapdata;
     Intent GalIntent, CropIntent ;
     public  static final int RequestPermissionCode  = 1 ;
     int width, height;
-
     RadioButton male;
     RadioButton female;
     private TextView mDisplayDate;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -62,14 +66,11 @@ public class ActivityRegistration extends AppCompatActivity {
 
         customShapeImageView = (CustomShapeImageView) findViewById(R.id.profile_photo);
         buttonGallery = (Button)findViewById(R.id.button1);
+        registration_name = (EditText)findViewById(R.id.registration_name);
         EnableRuntimePermission();
         buttonGallery.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
-                GetImageFromGallery();
-
-            }
+            public void onClick(View view) { GetImageFromGallery(); }
         });
         mDisplayDate = (TextView) findViewById(R.id.registration_date);
         mDisplayDate.setOnClickListener(new View.OnClickListener() {
@@ -94,11 +95,12 @@ public class ActivityRegistration extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
-                String date = day + "/" + month + "/" + year;
-                user.setBirthdate(date);
+                String date = year + "-" + month + "-" + day;
+                User.setBirthdate(date);
                 mDisplayDate.setText(date);
             }
         };
+        getID();
         navigateToMainActivity();
     }
 
@@ -140,24 +142,39 @@ public class ActivityRegistration extends AppCompatActivity {
             }
         }
     }
-
+//RETROFIT
 public void sendUser() {
     Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://localhost:3000/api/")
+            .baseUrl("http://geochat.a2hosted.com/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
     UserUploadService userApi = retrofit.create(UserUploadService.class);
-    RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), bitmapdata);
-    MultipartBody.Part image = MultipartBody.Part.createFormData("image", bitmapdata.toString(), requestBody);
-    Call<ResponseBody> call = userApi.UserSend(user.getName(), user.getBirthdate(), user.getPhone_number(), user.getGender(), user.getDevice_id(), image);
+    final String base64String = Base64.encodeToString(bitmapdata,Base64.URL_SAFE);
+    RequestBody photo = RequestBody.create(MediaType.parse("text/plain"), base64String);
+    RequestBody name = RequestBody.create(MediaType.parse("text/plain"),User.getName());
+    RequestBody phone_number = RequestBody.create(MediaType.parse("text/plain"),User.getPhone_number());
+    RequestBody birthdate = RequestBody.create(MediaType.parse("text/plain"),User.getBirthdate());
+    RequestBody gender = RequestBody.create(MediaType.parse("text/plain"),User.getGender());
+    RequestBody device_id = RequestBody.create(MediaType.parse("text/plain"),User.getDevice_id());
+    Call<ResponseBody> call = userApi.userSend(name,birthdate,phone_number,gender,device_id,photo);
     call.enqueue(new Callback<ResponseBody> () {
         @Override
         public void onResponse (Call<ResponseBody> call, Response<ResponseBody> response){
             ResponseBody body = response.body();
+            Log.v("RETROFIT",new Gson().toJson(response));
+            if(bitmapdata==null){
+                Log.v("BITMAP NULL EXCEPTION",bitmapdata.toString());
+            }
+            Log.v("Name",User.getName());
+            Log.v("Phone",User.getPhone_number());
+            Log.v("Birth",User.getBirthdate());
+            Log.v("Gender",User.getGender());
+            Log.v("Device",User.getDevice_id());
+            Log.v("PHOTO",base64String);
         }
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            Log.v("RETROFIT ERROR",t.getMessage());
         }
     });
 }
@@ -167,7 +184,7 @@ public void sendUser() {
         try {
             CropIntent = new Intent("com.android.camera.action.CROP");
 
-            CropIntent.setDataAndType(uri, "image/*");
+            CropIntent.setDataAndType(uri, "image/jpeg");
 
             CropIntent.putExtra("crop", "true");
             CropIntent.putExtra("outputX", 1000);
@@ -228,20 +245,18 @@ public void sendUser() {
         switch(view.getId()) {
             case R.id.radio_male:
                 if (checked)
-                   user.setGender("m");
+                   User.setGender("m");
                     break;
             case R.id.radio_female:
                 if (checked)
-                    user.setGender("f");
+                    User.setGender("f");
                     break;
         }
     }
 
-    public String getDeviceUniqueID(Activity activity){
-        String device_unique_id = Settings.Secure.getString(activity.getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-        user.setDevice_id(device_unique_id);
-        return device_unique_id;
+    public void getID(){
+        String str = Build.MANUFACTURER + " " + Build.MODEL;
+        User.setDevice_id(str);
     }
 
 
@@ -250,9 +265,16 @@ public void sendUser() {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendUser();
-                startActivity(new Intent(ActivityRegistration.this,MainActivity.class));
-                finish();
+                String name = registration_name.getText().toString();
+                User.setName(name);
+                if (registration_name.getText().toString().trim().equalsIgnoreCase("")) {
+                    registration_name.setError("This field can not be blank");
+                }else {
+                    sendUser();
+                    startActivity(new Intent(ActivityRegistration.this,MainActivity.class));
+                    finish();
+                }
+
             }
         });
 
